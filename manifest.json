@@ -1,0 +1,41 @@
+{
+  "manifest_version": 3,
+  "name": "Redmine Plus",
+  "version": "1.0.0",
+  "description": "增强Redmine使用体验",
+  "icons": {
+
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://redm.topcj.com/*"],
+      "css": ["css/custom-style.css"],
+      "js": [
+        "js/marked.min.js",
+        "js/plugins/project_shortcuts.js",
+        "js/plugins/time_tracking_shortcuts.js",
+        "js/plugins/immersive_input.js",
+        "js/content-script.js"
+      ],
+      "run_at": "document_end"
+    }
+  ],
+  "background": {
+    "service_worker": "js/background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Redmine Plus",
+    "default_icon": {
+
+    }
+  },
+  "permissions": [
+    "storage",
+    "activeTab"
+  ],
+  "host_permissions": [
+    "https://redm.topcj.com/*"
+  ],
+  "options_page": "options.html"
+}

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Redmine Plus</title>
+  <link rel="stylesheet" href="css/pico.min.css">
+  <style>
+    .main-container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .footer-container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .card-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    .sub-options input  {
+      height: 40px;
+      line-height: 12px;
+    }
+
+    .delete-btn {
+      height: 40px;
+      line-height: 12px;
+    }
+
+    .hide {
+      display: none;
+    }
+
+    #message {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 20px;
+      z-index: 1000;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .error-message {
+      background-color: #ffebee;
+      color: #c62828;
+      border: 1px solid #ef5350;
+      border-radius: 8px;
+    }
+
+    .success-message {
+      background-color: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <main class="container main-container">
+    <article class="project-shortcuts-card">
+      <header>
+        <div class="card-title">
+          <div>项目快捷入口</div>
+          <input type="checkbox" role="switch" id="project-shortcuts-switch" checked>
+        </div>
+      </div>
+      </header>
+      <div class="card-content" id="project-shortcuts-options">
+        <div class="sub-options">
+          <div>
+            <label for="default-query-id">默认查询ID</label>
+            <input type="text" id="default-query-id" placeholder="输入默认查询ID">
+          </div>
+          <div id="project-items">
+            <!-- 这里展示已添加的项目快捷入口 -->
+          </div>
+          <div>
+            <input type="submit" id="add-project-item" value="添加项目">
+          </div>
+        </div>
+        <div class="disabled-message hide">功能未开启</div>
+      </div>
+      <footer>
+        将在顶部展示项目快捷入口
+      </footer>
+    </article>
+
+    <article class="time-tracking-shortcuts-card">
+      <header>
+        <div class="card-title">
+          <div>耗时跟踪快捷入口</div>
+          <input type="checkbox" role="switch" id="time-tracking-shortcuts-switch" checked >
+        </div>
+      </header>
+      <div class="card-content" id="time-tracking-shortcuts-options">
+        <div class="sub-options">功能已开启</div>
+        <div class="disabled-message hide">功能未开启</div>
+      </div>
+      <footer>
+        将在顶部展示耗时报表快捷入口
+      </footer>
+    </article>
+
+    <article class="immersive-input-card">
+      <header>
+        <div class="card-title">
+          <div>沉浸式书写</div>
+          <input type="checkbox" role="switch" id="immersive-writing-switch" checked >
+        </div>
+      </header>
+      <div class="card-content" id="immersive-writing-options">
+        <div class="sub-options">功能已开启</div>
+        <div class="disabled-message hide">功能未开启</div>
+      </div>
+      <footer>
+        可在编辑问题描述时打开沉浸式书写模式
+      </footer>
+    </article>
+
+    <article class="issue-details-card">
+      <header>
+        <div class="card-title">
+          <div>问题快捷查看</div>
+          <input type="checkbox" role="switch" id="issue-details-switch" checked>
+        </div>
+      </header>
+      <div class="card-content" id="issue-details-options">
+        <div class="sub-options">功能已开启</div>
+        <div class="disabled-message hide">功能未开启</div>
+      </div>
+      <footer>
+        将在Issue列表左侧展示「查看」按钮，点击可在抽屉中打开详情。
+      </footer>
+    </article>
+
+    <article class="ai-completion-card">
+      <header>
+        <div class="card-title">
+          <div>AI补全</div>
+          <input type="checkbox" role="switch" id="ai-completion-switch" checked >
+        </div>
+      </header>
+      <div class="card-content" id="ai-completion-options">
+        <div class="sub-options">
+          <div class="form-group">
+            <label>API 服务地址</label>
+            <input type="text" id="api-service-address" placeholder="https://api.openai.com/v1/chat/completions">
+          </div>
+          <div class="form-group">
+            <label>API Key</label>
+            <input type="password" id="api-key" placeholder="输入API Key">
+          </div>
+          <div class="form-group">
+            <label>模型ID</label>
+            <input type="text" id="model-id" placeholder="gpt-3.5-turbo">
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>最大Tokens</label>
+              <input type="number" id="max-tokens" value="100">
+            </div>
+          </div>
+        </div>
+        <div class="disabled-message hide">功能未开启</div>
+      </div>
+      <footer>
+        将在编辑问题描述时启用AI补全功能
+      </footer> 
+    </article>
+  </main>
+
+  <footer class="container grid footer-container">
+    <input type="reset" id="reset-option" value="重置为默认">
+    <input type="submit" id="save-option" value="保存设置">
+  </footer>
+
+  <div id="message" class="hide"></div>
+
+  <script src="js/options.js"></script>
+
+</body>
+</html>
