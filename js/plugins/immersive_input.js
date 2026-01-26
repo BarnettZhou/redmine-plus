@@ -121,6 +121,7 @@ function openImmersiveInputDrawer(mainEditor) {
         resize: 'none', outline: 'none', borderRight: '1px solid #eee', fontFamily: 'Consolas, Monaco, "Courier New", monospace',
         backgroundColor: '#fafafa'
     });
+    dEditor.className = 'wiki-edit-deditor';
     dEditor.value = mainEditor.value;
 
     // 右侧预览区

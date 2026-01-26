@@ -28,6 +28,7 @@
         // 添加issue快捷查看
         if (config.issue_details.enabled) {
             // 实现issue快捷查看
+            initIssueDetail();
         }
 
         // 添加AI补全

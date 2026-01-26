@@ -12,6 +12,7 @@
       "css": ["css/custom-style.css"],
       "js": [
         "js/marked.min.js",
+        "js/plugins/issue_details.js",
         "js/plugins/project_shortcuts.js",
         "js/plugins/time_tracking_shortcuts.js",
         "js/plugins/immersive_input.js",
