@@ -1,8 +1,8 @@
 let immersive_input_drawer_visible = false;
+let markedRendererInitialized = false;
 
-console.log("immersive_input_drawer_visible:", immersive_input_drawer_visible);
-
-// 附件路径映射逻辑 (确保预览能显示 Redmine 附件图片)
+// 从附件列表中获取文件名到真实URL的映射
+// 有两种获取方式，如果存在 .attachments table tr 则从表格中获取，否则从 .attachments_fields 中获取
 function getAttachmentMap() {
     const map = {};
     document.querySelectorAll('.attachments table tr').forEach(tr => {
@@ -13,24 +13,49 @@ function getAttachmentMap() {
             map[fileName] = realUrl;
         }
     });
+    
+    if (Object.keys(map).length === 0) {
+        document.querySelectorAll('.attachments_fields span[id^="attachments_"]').forEach(span => {
+            const filenameInput = span.querySelector('input.filename');
+            const deleteLink = span.querySelector('a.remove-upload');
+            if (filenameInput && deleteLink) {
+                const fileName = filenameInput.value.trim();
+                const href = deleteLink.getAttribute('href');
+                const match = href.match(/\/attachments\/(\d+)\./);
+                if (match && fileName) {
+                    const id = match[1];
+                    map[fileName] = `/attachments/download/${id}/${fileName}`;
+                }
+            }
+        });
+    }
+
+    console.log('附件映射:', map);
+    
     return map;
 }
 
-const renderer = new marked.Renderer();
-renderer.image = function(obj) {
-    const href = obj.href;
-    const title = obj.title || "";
-    const text = obj.text || "";
+// 确保marked渲染器已初始化，用于处理图片渲染
+function ensureMarkedRenderer() {
+    if (markedRendererInitialized) return;
+    
+    const renderer = new marked.Renderer();
+    renderer.image = function(obj) {
+        const href = obj.href;
+        const title = obj.title || "";
+        const text = obj.text || "";
 
-    const attachmentMap = getAttachmentMap();
-    let finalHref = href;
-    // 如果图片名匹配到附件列表中的文件，则替换为真实 URL
-    if (attachmentMap[href]) {
-        finalHref = attachmentMap[href];
-    }
-    return `<img src="${finalHref}" alt="${text}" title="${title}" style="max-width:100%;">`;
-};
-marked.setOptions({ renderer: renderer });
+        const attachmentMap = getAttachmentMap();
+        let finalHref = href;
+        if (attachmentMap[href]) {
+            finalHref = attachmentMap[href];
+        }
+        return `<img src="${finalHref}" alt="${text}" title="${title}" style="max-width:100%;">`;
+    };
+    marked.setOptions({ renderer: renderer });
+    
+    markedRendererInitialized = true;
+}
 
 function initImmersiveInputUI(mainEditor) {
     const controls = document.createElement('div');
@@ -55,6 +80,7 @@ function initImmersiveInputUI(mainEditor) {
 }
 
 function openImmersiveInputDrawer(mainEditor) {
+    ensureMarkedRenderer();
     immersive_input_drawer_visible = true;
     
     // 创建遮罩层
