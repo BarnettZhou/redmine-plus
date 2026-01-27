@@ -145,6 +145,7 @@ function initIssueDetail() {
             style.textContent = `
                 #top-menu { display: none !important; }
                 #header { display: none !important; }
+                #sidebar { display: none !important; }
             `;
             iframeDoc.head.appendChild(style);
 
@@ -171,11 +172,12 @@ function initIssueDetail() {
             // 移除所有行的 context-menu-selection 类
             document.querySelectorAll('tr.context-menu-selection').forEach(tr => {
                 tr.classList.remove('context-menu-selection');
+                tr.classList.remove('detail-opened');
             });
 
             // 为当前行添加 context-menu-selection 类
             if (currentRow) {
-                currentRow.classList.add('context-menu-selection');
+                currentRow.classList.add('detail-opened');
             }
         };
 

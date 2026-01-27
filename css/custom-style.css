@@ -1,0 +1,9 @@
+#wrapper .detail-opened, #wrapper .detail-opened>td {
+    background-color: #614ba6 !important;
+    color: #fff !important;
+}
+
+#wrapper .detail-opened>td>a {
+    background-color: #614ba6 !important;
+    color: #fff !important;
+}
