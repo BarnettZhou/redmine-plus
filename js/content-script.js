@@ -38,13 +38,6 @@
     }
 
     chrome.storage.local.get("redminePlusConfig", function(result) {
-        const defaultConfig = {
-            project_shortcuts: {enabled: false},
-            time_tracking_shortcuts: {enabled: false},
-            immersive_input: {enabled: false},
-            issue_details: {enabled: false},
-            ai_completion: {enabled: false}
-        };
         const config = result.redminePlusConfig || defaultConfig;
         execApp(config);
     });

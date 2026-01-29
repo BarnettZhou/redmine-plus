@@ -1,30 +1,3 @@
-// 默认配置
-const defaultConfig = {
-    project_shortcuts: {
-        enabled: true,
-        default_query_id: "",
-        items: []
-    },
-    time_tracking_shortcuts: {
-        enabled: true
-    },
-    immersive_input: {
-        enabled: true
-    },
-    issue_details: {
-        enabled: true
-    },
-    ai_completion: {
-        enabled: true,
-        api_service_address: '',
-        api_key: '',
-        model_id: '',
-        max_tokens: 100,
-        temperature: 0.2,
-        top_p: 0.5
-    }
-};
-
 // 加载配置
 function loadConfig() {
     chrome.storage.local.get("redminePlusConfig", function(result) {
@@ -77,15 +50,27 @@ function handleSwitchChange(card) {
     const switchElement = document.getElementById(`${card}-switch`);
     const cardContent = document.getElementById(`${card}-options`);
     const isEnabled = switchElement.checked;
-
-    console.log(isEnabled);
+    
+    // 更新状态标签
+    const statusBadge = document.getElementById(`${card}-status`);
+    if (statusBadge) {
+        if (isEnabled) {
+            statusBadge.textContent = '已启用';
+            statusBadge.className = 'status-badge active';
+        } else {
+            statusBadge.textContent = '已禁用';
+            statusBadge.className = 'status-badge inactive';
+        }
+    }
 
     if (isEnabled) {
-        cardContent.getElementsByClassName('sub-options')[0].classList.toggle('hide', false);
-        cardContent.getElementsByClassName('disabled-message')[0].classList.toggle('hide', true);
+        cardContent.querySelector('.sub-options').style.display = 'block';
+        cardContent.querySelector('.disabled-message').style.display = 'none';
+        cardContent.classList.remove('disabled-overlay');
     } else {
-        cardContent.getElementsByClassName('sub-options')[0].classList.toggle('hide', true);
-        cardContent.getElementsByClassName('disabled-message')[0].classList.toggle('hide', false);
+        cardContent.querySelector('.sub-options').style.display = 'none';
+        cardContent.querySelector('.disabled-message').style.display = 'block';
+        cardContent.classList.add('disabled-overlay');
     }
 }
 
@@ -139,20 +124,31 @@ function addProjectShortcutItem(name = '', key = '') {
     const itemsContainer = document.getElementById('project-items');
 
     const itemDiv = document.createElement('div');
-    itemDiv.className = 'project-item grid';
+    itemDiv.className = 'project-item';
 
     itemDiv.innerHTML = `
-        <input type="text" placeholder="项目名称" value="${name}">
-        <input type="text" placeholder="项目key" value="${key}">
-        <button class="delete-btn outline">删除</button>
+        <input type="text" class="form-input" placeholder="项目名称" value="${name}">
+        <input type="text" class="form-input" placeholder="项目key" value="${key}">
+        <button class="btn btn-danger" title="删除">🗑️</button>
     `;
 
     // 添加删除按钮事件
-    itemDiv.querySelector('.delete-btn').addEventListener('click', function() {
-        itemDiv.remove();
+    itemDiv.querySelector('.btn-danger').addEventListener('click', function() {
+        itemDiv.style.opacity = '0';
+        itemDiv.style.transform = 'translateX(-10px)';
+        setTimeout(() => itemDiv.remove(), 200);
     });
     
     itemsContainer.appendChild(itemDiv);
+    
+    // 入场动画
+    itemDiv.style.opacity = '0';
+    itemDiv.style.transform = 'translateY(-10px)';
+    setTimeout(() => {
+        itemDiv.style.transition = 'all 0.2s';
+        itemDiv.style.opacity = '1';
+        itemDiv.style.transform = 'translateY(0)';
+    }, 10);
 }
 
 // 页面加载完成后初始化
@@ -283,12 +279,19 @@ function resetToDefault() {
 // 显示消息
 function showMessage(message, type) {
     const messageDiv = document.getElementById('message');
-    messageDiv.innerHTML = message;
-    messageDiv.className = `message ${type}`;
-    messageDiv.style.display = 'block';
-
-    // 3秒后自动隐藏消息
+    messageDiv.innerHTML = `
+        <span style="font-size: 1.125rem;">${type === 'success-message' ? '✓' : '✕'}</span>
+        <span>${message}</span>
+    `;
+    messageDiv.className = `message ${type === 'success-message' ? 'success' : 'error'}`;
+    
+    // 3秒后自动隐藏
     setTimeout(() => {
-        messageDiv.style.display = 'none';
+        messageDiv.style.opacity = '0';
+        messageDiv.style.transform = 'translateX(100%)';
+        setTimeout(() => {
+            messageDiv.style.display = 'none';
+            messageDiv.className = 'hide';
+        }, 300);
     }, 3000);
 }

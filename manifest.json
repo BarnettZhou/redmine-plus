@@ -12,6 +12,7 @@
       "matches": ["https://redm.topcj.com/*"],
       "css": ["css/custom-style.css"],
       "js": [
+        "js/default_config.js",
         "js/marked.min.js",
         "js/plugins/issue_details.js",
         "js/plugins/project_shortcuts.js",

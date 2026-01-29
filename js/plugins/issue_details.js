@@ -116,12 +116,26 @@ function initIssueDetail() {
     document.body.appendChild(drawer);
     document.body.appendChild(overlay);
 
+    function clearSelection() {
+        document.querySelectorAll('tr.context-menu-selection').forEach(tr => {
+            tr.classList.remove('context-menu-selection');
+            
+        });
+        document.querySelectorAll('tr.detail-opened').forEach(tr => {
+            tr.classList.remove('detail-opened');
+        });
+    }
+
     // 统一关闭函数
     function closeDrawer() {
-        drawer.style.right = '-1200px';
-        overlay.style.display = 'none';
-        document.documentElement.style.overflow = '';
-        document.body.style.overflow = '';
+        // 检查 drawer 是否真的打开，避免在未打开时执行关闭操作
+        if (drawer.style.right === '0px' || drawer.style.right === '0') {
+            drawer.style.right = '-1200px';
+            overlay.style.display = 'none';
+            document.documentElement.style.overflow = '';
+            document.body.style.overflow = '';
+            clearSelection();
+        }
     }
 
     // 事件绑定
@@ -170,10 +184,7 @@ function initIssueDetail() {
             document.body.style.overflow = 'hidden';
 
             // 移除所有行的 context-menu-selection 类
-            document.querySelectorAll('tr.context-menu-selection').forEach(tr => {
-                tr.classList.remove('context-menu-selection');
-                tr.classList.remove('detail-opened');
-            });
+            clearSelection();
 
             // 为当前行添加 context-menu-selection 类
             if (currentRow) {

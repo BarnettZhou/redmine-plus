@@ -1,47 +1,222 @@
+<!-- popup.html -->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Redmine Plus</title>
-  <link rel="stylesheet" href="css/pico.min.css">
   <style>
-    body {
-      min-width: 300px;
-      padding: 20px;
+    :root {
+      --primary-color: #4f46e5;
+      --primary-hover: #4338ca;
+      --primary-light: #e0e7ff;
+      --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      --card-bg: #ffffff;
+      --text-primary: #1e293b;
+      --text-secondary: #64748b;
+      --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
     }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      width: 320px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: transparent;
+      overflow: hidden;
+    }
+
     .popup-container {
+      background: var(--card-bg);
+      margin: 0;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Header with Gradient */
+    .popup-header {
+      background: var(--bg-gradient);
+      padding: 1.5rem;
+      text-align: center;
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .popup-header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+      background-size: 20px 20px;
+      opacity: 0.3;
+    }
+
+    .logo-icon {
+      width: 48px;
+      height: 48px;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 0.75rem;
+      font-size: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      position: relative;
+      z-index: 1;
+    }
+
+    .logo-text {
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .version-tag {
+      display: inline-block;
+      margin-top: 0.25rem;
+      padding: 0.125rem 0.5rem;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Content Section */
+    .popup-content {
+      padding: 1.5rem;
+    }
+
+    .feature-list {
       display: flex;
       flex-direction: column;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .feature-item {
+      display: flex;
       align-items: center;
-      gap: 20px;
+      gap: 0.75rem;
+      padding: 0.5rem;
+      font-size: 0.875rem;
+      color: var(--text-secondary);
     }
-    .logo {
-      font-size: 24px;
-      font-weight: bold;
-      color: #e040fb;
+
+    .feature-icon {
+      width: 20px;
+      height: 20px;
+      color: var(--primary-color);
     }
-    .open-options-btn {
+
+    /* Primary Button */
+    .primary-btn {
       width: 100%;
-      padding: 12px 24px;
-      font-size: 16px;
-      cursor: pointer;
-      background: #2196F3;
+      padding: 0.875rem;
+      background: var(--primary-color);
       color: white;
       border: none;
-      border-radius: 4px;
-      transition: background 0.3s;
+      border-radius: 8px;
+      font-size: 0.9375rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: all 0.2s;
+      box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2);
     }
-    .open-options-btn:hover {
-      background: #1976D2;
+
+    .primary-btn:hover {
+      background: var(--primary-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 8px -1px rgba(79, 70, 229, 0.3);
+    }
+
+    .primary-btn:active {
+      transform: translateY(0);
+    }
+
+    /* Footer */
+    .popup-footer {
+      padding: 0.75rem 1.5rem;
+      background: #f8fafc;
+      border-top: 1px solid #e2e8f0;
+      text-align: center;
+      font-size: 0.75rem;
+      color: #94a3b8;
+    }
+
+    /* Animation */
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .popup-content {
+      animation: slideUp 0.3s ease-out;
     }
   </style>
 </head>
 <body>
   <div class="popup-container">
-    <div class="logo">Redmine Plus</div>
-    <button id="openOptionsBtn" class="open-options-btn">打开设置</button>
+    <header class="popup-header">
+      <div class="logo-icon">🔧</div>
+      <div class="logo-text">Redmine Plus</div>
+      <span class="version-tag">v1.0.0</span>
+    </header>
+    
+    <div class="popup-content">
+      <div class="feature-list">
+        <div class="feature-item">
+          <span class="feature-icon">⚡</span>
+          <span>项目快捷入口</span>
+        </div>
+        <div class="feature-item">
+          <span class="feature-icon">⏱️</span>
+          <span>耗时跟踪增强</span>
+        </div>
+        <div class="feature-item">
+          <span class="feature-icon">✍️</span>
+          <span>沉浸式书写</span>
+        </div>
+        <div class="feature-item">
+          <span class="feature-icon">🤖</span>
+          <span>AI 智能补全</span>
+        </div>
+      </div>
+      
+      <button id="openOptionsBtn" class="primary-btn">
+        <span>⚙️</span>
+        打开设置中心
+      </button>
+    </div>
+    
+    <footer class="popup-footer">
+      点击上方按钮进行详细配置
+    </footer>
   </div>
+  
   <script src="js/popup.js"></script>
 </body>
 </html>
