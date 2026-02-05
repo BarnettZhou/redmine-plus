@@ -21,5 +21,8 @@ const defaultConfig = {
     },
     ai_completion: {
         enabled: false
+    },
+    page_beautify: {
+        enabled: false
     }
 };

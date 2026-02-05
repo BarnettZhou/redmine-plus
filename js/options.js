@@ -43,6 +43,10 @@ function populateForm(config) {
     document.getElementById('model-id').value = config.ai_completion.model_id;
     document.getElementById('max-tokens').value = config.ai_completion.max_tokens;
     handleSwitchChange('ai-completion');
+
+    // 页面美化
+    document.getElementById('page-beautify-switch').checked = config.page_beautify.enabled;
+    handleSwitchChange('page-beautify');
 }
 
 // 开关事件处理
@@ -116,6 +120,11 @@ function setupEventListeners() {
     // AI补全开关事件
     document.getElementById('ai-completion-switch').addEventListener('change', function() {
         handleSwitchChange('ai-completion');
+    });
+
+    // 页面美化开关事件
+    document.getElementById('page-beautify-switch').addEventListener('change', function() {
+        handleSwitchChange('page-beautify');
     });
 }
 
@@ -242,6 +251,9 @@ function saveConfig() {
             api_key: document.getElementById('api-key').value.trim(),
             model_id: document.getElementById('model-id').value.trim(),
             max_tokens: parseInt(document.getElementById('max-tokens').value) || 100,
+        },
+        page_beautify: {
+            enabled: document.getElementById('page-beautify-switch').checked
         }
     };
 

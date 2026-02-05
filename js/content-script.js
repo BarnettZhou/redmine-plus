@@ -4,6 +4,11 @@
     
     function execApp(config) {
 
+        // 添加页面美化（最先加载，确保样式优先）
+        if (config.page_beautify && config.page_beautify.enabled) {
+            initPageBeautify(config.page_beautify);
+        }
+
         // 添加项目快捷入口
         if (config.project_shortcuts.enabled) {
             projectShortcutsInit(config.project_shortcuts);
