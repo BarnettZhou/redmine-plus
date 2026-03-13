@@ -32,8 +32,13 @@
         }
 
         // 添加AI补全
-        if (config.ai_completion.enabled) {
+        if (config.ai_completion && config.ai_completion.enabled) {
             // 实现AI补全
+        }
+
+        // 添加时间报表图表
+        if (config.time_report_chart && config.time_report_chart.enabled) {
+            timeReportChartInit(config.time_report_chart);
         }
     }
 

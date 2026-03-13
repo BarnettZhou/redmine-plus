@@ -36,13 +36,10 @@ function populateForm(config) {
     document.getElementById('issue-details-switch').checked = config.issue_details.enabled;
     handleSwitchChange('issue-details');
 
-    // AI补全
-    document.getElementById('ai-completion-switch').checked = config.ai_completion.enabled;
-    document.getElementById('api-service-address').value = config.ai_completion.api_service_address;
-    document.getElementById('api-key').value = config.ai_completion.api_key;
-    document.getElementById('model-id').value = config.ai_completion.model_id;
-    document.getElementById('max-tokens').value = config.ai_completion.max_tokens;
-    handleSwitchChange('ai-completion');
+    // 时间报表图表
+    const timeReportChartEnabled = config.time_report_chart ? config.time_report_chart.enabled : true;
+    document.getElementById('time-report-chart-switch').checked = timeReportChartEnabled;
+    handleSwitchChange('time-report-chart');
 }
 
 // 开关事件处理
@@ -88,7 +85,7 @@ function setupEventListeners() {
     });
 
     // 重置为默认设置
-    document.getElementById('reset-option').addEventListener('click', function() {
+    document.getElementById('reset-option').addEventListener('click', function(e) {
         e.preventDefault();
         resetToDefault();
     });
@@ -113,9 +110,9 @@ function setupEventListeners() {
         handleSwitchChange('issue-details');
     });
 
-    // AI补全开关事件
-    document.getElementById('ai-completion-switch').addEventListener('change', function() {
-        handleSwitchChange('ai-completion');
+    // 时间报表图表开关事件
+    document.getElementById('time-report-chart-switch').addEventListener('change', function() {
+        handleSwitchChange('time-report-chart');
     });
 }
 
@@ -175,40 +172,8 @@ function validateForm() {
         }
     });
     
-    // 验证AI补全配置
-    const aiEnabled = document.getElementById('ai-completion-switch').checked;
-    if (aiEnabled) {
-        const apiService = document.getElementById('api-service-address').value.trim();
-        const apiKey = document.getElementById('api-key').value.trim();
-        const modelId = document.getElementById('model-id').value.trim();
-
-        if (!apiService) {
-            errors.push('AI补全已启用，但未填写API服务地址');
-        }
-        if (!apiKey) {
-            errors.push('AI补全已启用，但未填写API Key');
-        }
-        if (!modelId) {
-            errors.push('AI补全已启用，但未填写模型ID');
-        }
-        
-        // 验证URL格式
-        if (apiService && !isValidUrl(apiService)) {
-            errors.push('API服务地址格式不正确');
-        }
-    }
     
     return errors;
-}
-
-// 验证URL格式
-function isValidUrl(url) {
-    try {
-        new URL(url);
-        return true;
-    } catch (e) {
-        return false;
-    }
 }
 
 // 保存配置
@@ -236,12 +201,9 @@ function saveConfig() {
         issue_details: {
             enabled: document.getElementById('issue-details-switch').checked
         },
-        ai_completion: {
-            enabled: document.getElementById('ai-completion-switch').checked,
-            api_service_address: document.getElementById('api-service-address').value.trim(),
-            api_key: document.getElementById('api-key').value.trim(),
-            model_id: document.getElementById('model-id').value.trim(),
-            max_tokens: parseInt(document.getElementById('max-tokens').value) || 100,
+        ai_completion: defaultConfig.ai_completion,
+        time_report_chart: {
+            enabled: document.getElementById('time-report-chart-switch').checked
         }
     };
 

@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Redmine Plus",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "增强Redmine使用体验",
   "icons": {
     "64": "icons/icon-64.png",
@@ -14,10 +14,12 @@
       "js": [
         "js/default_config.js",
         "js/marked.min.js",
+        "js/chart.umd.min.js",
         "js/plugins/issue_details.js",
         "js/plugins/project_shortcuts.js",
         "js/plugins/time_tracking_shortcuts.js",
         "js/plugins/immersive_input.js",
+        "js/plugins/time_report_chart.js",
         "js/content-script.js"
       ],
       "run_at": "document_end"

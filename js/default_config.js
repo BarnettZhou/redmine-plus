@@ -21,5 +21,8 @@ const defaultConfig = {
     },
     ai_completion: {
         enabled: false
+    },
+    time_report_chart: {
+        enabled: true
     }
 };

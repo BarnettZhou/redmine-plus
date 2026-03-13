@@ -610,43 +610,26 @@
       </footer>
     </article>
 
-    <!-- AI补全 -->
+    <!-- 时间报表图表 -->
     <article class="card">
       <header class="card-header">
         <div class="card-title-wrapper">
-          <div class="card-icon">🤖</div>
+          <div class="card-icon">📊</div>
           <div>
-            <div class="card-title">AI 补全</div>
-            <span class="status-badge active" id="ai-completion-status">已启用</span>
+            <div class="card-title">时间报表图表</div>
+            <span class="status-badge active" id="time-report-chart-status">已启用</span>
           </div>
         </div>
         <label class="switch">
-          <input type="checkbox" id="ai-completion-switch" checked>
+          <input type="checkbox" id="time-report-chart-switch" checked>
           <span class="slider"></span>
         </label>
       </header>
-      <div class="card-body" id="ai-completion-options">
+      <div class="card-body" id="time-report-chart-options">
         <div class="sub-options">
-          <div class="form-group">
-            <label class="form-label">API 服务地址</label>
-            <input type="text" class="form-input" id="api-service-address" placeholder="https://api.openai.com/v1/chat/completions">
-          </div>
-          
-          <div class="form-group">
-            <label class="form-label">API Key</label>
-            <input type="password" class="form-input" id="api-key" placeholder="sk-...">
-          </div>
-          
-          <div class="form-row">
-            <div class="form-group">
-              <label class="form-label">模型 ID</label>
-              <input type="text" class="form-input" id="model-id" placeholder="gpt-3.5-turbo">
-            </div>
-            <div class="form-group">
-              <label class="form-label">最大 Tokens</label>
-              <input type="number" class="form-input" id="max-tokens" value="100" min="1" max="4000">
-            </div>
-          </div>
+          <p style="color: var(--text-secondary); font-size: 0.875rem;">
+            功能已启用，时间报表页面将显示「生成图表」按钮，支持可视化展示工时数据
+          </p>
         </div>
         <div class="disabled-message hide" style="display: none;">
           <div class="disabled-badge">
@@ -655,9 +638,10 @@
         </div>
       </div>
       <footer class="card-footer">
-        基于 AI 的智能写作辅助，需要在编辑问题时触发
+        一键生成工时统计图表，支持按项目堆叠展示
       </footer>
     </article>
+
   </main>
 
   <footer class="footer-actions">
