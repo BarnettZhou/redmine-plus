@@ -24,5 +24,14 @@ const defaultConfig = {
     },
     time_report_chart: {
         enabled: true
+    },
+    time_entry_assistant: {
+        enabled: true,
+        items: [
+            {
+                "project_name": "示例项目",
+                "custom_field_value": "1"
+            }
+        ]
     }
 };

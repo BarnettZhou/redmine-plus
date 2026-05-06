@@ -24,6 +24,22 @@ function populateForm(config) {
         });
     }
 
+    // 工时登记助手
+    const timeEntryAssistantEnabled = config.time_entry_assistant ? config.time_entry_assistant.enabled : true;
+    document.getElementById('time-entry-assistant-switch').checked = timeEntryAssistantEnabled;
+    handleSwitchChange('time-entry-assistant');
+
+    // 清空现有映射列表
+    const timeEntryItemsContainer = document.getElementById('time-entry-assistant-items');
+    timeEntryItemsContainer.innerHTML = '';
+
+    // 添加工时登记助手映射列表
+    if (config.time_entry_assistant && config.time_entry_assistant.items && config.time_entry_assistant.items.length > 0) {
+        config.time_entry_assistant.items.forEach(item => {
+            addTimeEntryAssistantItem(item.project_name, item.custom_field_value);
+        });
+    }
+
     // 耗时快捷查询
     document.getElementById('time-tracking-shortcuts-switch').checked = config.time_tracking_shortcuts.enabled;
     handleSwitchChange('time-tracking-shortcuts');
@@ -95,6 +111,16 @@ function setupEventListeners() {
         handleSwitchChange('project-shortcuts');
     });
 
+    // 工时登记助手开关事件
+    document.getElementById('time-entry-assistant-switch').addEventListener('change', function() {
+        handleSwitchChange('time-entry-assistant');
+    });
+
+    // 添加工时登记助手映射项
+    document.getElementById('add-time-entry-assistant-item').addEventListener('click', function() {
+        addTimeEntryAssistantItem();
+    });
+
     // 耗时快捷查询开关事件
     document.getElementById('time-tracking-shortcuts-switch').addEventListener('change', function() {
         handleSwitchChange('time-tracking-shortcuts');
@@ -148,6 +174,38 @@ function addProjectShortcutItem(name = '', key = '') {
     }, 10);
 }
 
+// 添加工时登记助手映射项
+function addTimeEntryAssistantItem(projectName = '', fieldValue = '') {
+    const itemsContainer = document.getElementById('time-entry-assistant-items');
+
+    const itemDiv = document.createElement('div');
+    itemDiv.className = 'project-item';
+
+    itemDiv.innerHTML = `
+        <input type="text" class="form-input" placeholder="项目名称" value="${projectName}">
+        <input type="text" class="form-input" placeholder="字段值" value="${fieldValue}">
+        <button class="btn btn-danger" title="删除">🗑️</button>
+    `;
+
+    // 添加删除按钮事件
+    itemDiv.querySelector('.btn-danger').addEventListener('click', function() {
+        itemDiv.style.opacity = '0';
+        itemDiv.style.transform = 'translateX(-10px)';
+        setTimeout(() => itemDiv.remove(), 200);
+    });
+    
+    itemsContainer.appendChild(itemDiv);
+    
+    // 入场动画
+    itemDiv.style.opacity = '0';
+    itemDiv.style.transform = 'translateY(-10px)';
+    setTimeout(() => {
+        itemDiv.style.transition = 'all 0.2s';
+        itemDiv.style.opacity = '1';
+        itemDiv.style.transform = 'translateY(0)';
+    }, 10);
+}
+
 // 页面加载完成后初始化
 document.addEventListener('DOMContentLoaded', function() {
     loadConfig();
@@ -169,6 +227,20 @@ function validateForm() {
         }
         if (key && !name) {
             errors.push(`第${index + 1}个项目缺少名称`);
+        }
+    });
+
+    // 验证工时登记助手
+    const timeEntryItems = document.querySelectorAll('#time-entry-assistant-items .project-item');
+    timeEntryItems.forEach((item, index) => {
+        const projectName = item.querySelector('input[placeholder="项目名称"]').value.trim();
+        const fieldValue = item.querySelector('input[placeholder="字段值"]').value.trim();
+
+        if (projectName && !fieldValue) {
+            errors.push(`第${index + 1}个映射缺少字段值`);
+        }
+        if (fieldValue && !projectName) {
+            errors.push(`第${index + 1}个映射缺少项目名称`);
         }
     });
     
@@ -204,6 +276,10 @@ function saveConfig() {
         ai_completion: defaultConfig.ai_completion,
         time_report_chart: {
             enabled: document.getElementById('time-report-chart-switch').checked
+        },
+        time_entry_assistant: {
+            enabled: document.getElementById('time-entry-assistant-switch').checked,
+            items: []
         }
     };
 
@@ -218,6 +294,20 @@ function saveConfig() {
             config.project_shortcuts.items.push({
                 name: name,
                 project_key: key
+            });
+        }
+    });
+
+    // 添加工时登记助手映射项
+    const timeEntryItems = document.querySelectorAll('#time-entry-assistant-items .project-item');
+    timeEntryItems.forEach(item => {
+        const projectName = item.querySelector('input[placeholder="项目名称"]').value.trim();
+        const fieldValue = item.querySelector('input[placeholder="字段值"]').value.trim();
+        
+        if (projectName && fieldValue) {
+            config.time_entry_assistant.items.push({
+                project_name: projectName,
+                custom_field_value: fieldValue
             });
         }
     });

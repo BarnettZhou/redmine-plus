@@ -514,6 +514,42 @@
       </footer>
     </article>
 
+    <!-- 工时登记助手 -->
+    <article class="card">
+      <header class="card-header">
+        <div class="card-title-wrapper">
+          <div class="card-icon">📝</div>
+          <div>
+            <div class="card-title">工时登记助手</div>
+          </div>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="time-entry-assistant-switch" checked>
+          <span class="slider"></span>
+        </label>
+      </header>
+      <div class="card-body" id="time-entry-assistant-options">
+        <div class="sub-options">
+          <div class="form-label" style="margin-bottom: 0.75rem;">项目映射列表</div>
+          <div class="project-list" id="time-entry-assistant-items">
+            <!-- 映射项将动态添加到这里 -->
+          </div>
+          
+          <button class="btn btn-secondary btn-add" id="add-time-entry-assistant-item">
+            <span>+</span> 添加映射
+          </button>
+        </div>
+        <div class="disabled-message hide" style="display: none;">
+          <div class="disabled-badge">
+            <span>⚠️</span> 功能当前已禁用
+          </div>
+        </div>
+      </div>
+      <footer class="card-footer">
+        根据当前项目自动选择工时登记页面的自定义字段值
+      </footer>
+    </article>
+
     <!-- 耗时跟踪快捷入口 -->
     <article class="card">
       <header class="card-header">

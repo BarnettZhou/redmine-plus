@@ -40,6 +40,11 @@
         if (config.time_report_chart && config.time_report_chart.enabled) {
             timeReportChartInit(config.time_report_chart);
         }
+
+        // 添加工时登记助手
+        if (config.time_entry_assistant && config.time_entry_assistant.enabled) {
+            timeEntryAssistantInit(config.time_entry_assistant);
+        }
     }
 
     chrome.storage.local.get("redminePlusConfig", function(result) {
