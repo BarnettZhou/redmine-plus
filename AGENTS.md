@@ -57,11 +57,11 @@ redmine-plus/
 - **配置项**:
   - `enabled`: 是否启用
   - `default_query_id`: 默认查询 ID（留空则使用预设查询条件）
-  - `items`: 项目列表，每项包含 `name`（显示名称）和 `project_key`（项目标识）
+  - `items`: 入口列表，每项包含 `name`（显示名称）、`project_key`（项目标识）和 `query_id`（查询 ID，留空则使用默认查询 ID 兜底）
 - **实现细节**:
   - 在项目链接前添加分隔符 `|`
   - 链接格式: `/projects/{project_key}/issues?query_id=...` 或默认查询参数
-  - 默认查询参数包含状态为开放、跟踪类型为 2（Feature）的筛选条件
+  - 查询参数优先级：item 的 `query_id` > 全局 `default_query_id` > 默认查询参数（状态为开放、跟踪类型为 2（Feature）的筛选条件）
 
 ### 2. 耗时跟踪快捷入口 (Time Tracking Shortcuts)
 

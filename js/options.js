@@ -17,10 +17,10 @@ function populateForm(config) {
     const itemsContainer = document.getElementById('project-items');
     itemsContainer.innerHTML = '';
 
-    // 添加项目列表
+    // 添加入口列表
     if (config.project_shortcuts.items && config.project_shortcuts.items.length > 0) {
         config.project_shortcuts.items.forEach(item => {
-            addProjectShortcutItem(item.name, item.project_key);
+            addProjectShortcutItem(item.name, item.project_key, item.query_id);
         });
     }
 
@@ -143,15 +143,16 @@ function setupEventListeners() {
 }
 
 // 添加项目快捷入口项
-function addProjectShortcutItem(name = '', key = '') {
+function addProjectShortcutItem(name = '', key = '', queryId = '') {
     const itemsContainer = document.getElementById('project-items');
 
     const itemDiv = document.createElement('div');
-    itemDiv.className = 'project-item';
+    itemDiv.className = 'project-item with-query';
 
     itemDiv.innerHTML = `
         <input type="text" class="form-input" placeholder="项目名称" value="${name}">
         <input type="text" class="form-input" placeholder="项目key" value="${key}">
+        <input type="text" class="form-input" placeholder="查询ID" value="${queryId}">
         <button class="btn btn-danger" title="删除">🗑️</button>
     `;
 
@@ -223,10 +224,10 @@ function validateForm() {
         const key = item.querySelector('input[placeholder="项目key"]').value.trim();
 
         if (name && !key) {
-            errors.push(`第${index + 1}个项目缺少项目Key`);
+            errors.push(`第${index + 1}个入口缺少项目Key`);
         }
         if (key && !name) {
-            errors.push(`第${index + 1}个项目缺少名称`);
+            errors.push(`第${index + 1}个入口缺少名称`);
         }
     });
 
@@ -283,17 +284,19 @@ function saveConfig() {
         }
     };
 
-    // 添加项目快捷入口项
+    // 添加入口列表
     const projectItems = document.querySelectorAll('#project-items .project-item');
     console.log(projectItems);
     projectItems.forEach(item => {
         const name = item.querySelector('input[placeholder="项目名称"]').value.trim();
         const key = item.querySelector('input[placeholder="项目key"]').value.trim();
+        const queryId = item.querySelector('input[placeholder="查询ID"]').value.trim();
         
         if (name && key) {
             config.project_shortcuts.items.push({
                 name: name,
-                project_key: key
+                project_key: key,
+                query_id: queryId
             });
         }
     });

@@ -6,7 +6,8 @@ const defaultConfig = {
         items: [
             {
                 "name": "其他",
-                "project_key": "other_1"
+                "project_key": "other_1",
+                "query_id": ""
             },
         ]
     },
