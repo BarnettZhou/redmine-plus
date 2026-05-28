@@ -59,6 +59,7 @@ function ensureMarkedRenderer() {
 
 function initImmersiveInputUI(mainEditor) {
     const controls = document.createElement('div');
+    controls.setAttribute('data-redmine-plus-immersive', 'true');
     Object.assign(controls.style, {
         position: 'absolute', right: '10px', bottom: '5px', zIndex: '1001',
         display: 'flex', gap: '5px', alignItems: 'center'
