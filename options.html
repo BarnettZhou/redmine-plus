@@ -463,6 +463,7 @@
     .card:nth-child(3) { animation-delay: 0.15s; }
     .card:nth-child(4) { animation-delay: 0.2s; }
     .card:nth-child(5) { animation-delay: 0.25s; }
+    .card:nth-child(6) { animation-delay: 0.3s; }
   </style>
 </head>
 <body>
@@ -477,6 +478,32 @@
   </header>
 
   <main class="main-container">
+    <!-- 基础设置 -->
+    <article class="card">
+      <header class="card-header">
+        <div class="card-title-wrapper">
+          <div class="card-icon">🌐</div>
+          <div>
+            <div class="card-title">基础设置</div>
+          </div>
+        </div>
+      </header>
+      <div class="card-body" id="host-options">
+        <div class="sub-options">
+          <div class="form-group">
+            <label class="form-label">Redmine 服务地址</label>
+            <input type="text" class="form-input" id="host-input" placeholder="例如：https://redm.example.com" value="127.0.0.1:8080">
+            <p style="color: var(--text-secondary); font-size: 0.75rem; margin-top: 0.5rem;">
+              格式：https://example.com 或 example.com:8080，修改后需刷新 Redmine 页面生效
+            </p>
+          </div>
+        </div>
+      </div>
+      <footer class="card-footer">
+        设置 Redmine 服务器地址，扩展将在此地址上生效
+      </footer>
+    </article>
+
     <!-- 项目快捷入口 -->
     <article class="card">
       <header class="card-header">

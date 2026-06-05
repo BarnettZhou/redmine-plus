@@ -8,6 +8,9 @@ function loadConfig() {
 
 // 填充表单
 function populateForm(config) {
+    // 基础设置
+    document.getElementById('host-input').value = config.host || '127.0.0.1:8080';
+
     // 项目快捷入口
     document.getElementById('project-shortcuts-switch').checked = config.project_shortcuts.enabled;
     document.getElementById('default-query-id').value = config.project_shortcuts.default_query_id || '';
@@ -260,6 +263,7 @@ function saveConfig() {
 
     // 构建配置对象
     const config = {
+        host: document.getElementById('host-input').value.trim() || '127.0.0.1:8080',
         project_shortcuts: {
             enabled: document.getElementById('project-shortcuts-switch').checked,
             default_query_id: document.getElementById('default-query-id').value,

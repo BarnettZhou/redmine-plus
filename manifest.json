@@ -9,7 +9,10 @@
   },
   "content_scripts": [
     {
-      "matches": ["https://redm.topcj.com/*"],
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ],
       "css": ["css/custom-style.css"],
       "js": [
         "js/default_config.js",
@@ -39,10 +42,12 @@
   "permissions": [
     "storage",
     "activeTab",
-    "tabs"
+    "tabs",
+    "scripting"
   ],
   "host_permissions": [
-    "https://redm.topcj.com/*"
+    "http://*/*",
+    "https://*/*"
   ],
   "options_page": "options.html"
 }

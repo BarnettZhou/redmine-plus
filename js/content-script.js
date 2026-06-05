@@ -1,8 +1,24 @@
 (function() {
 
     console.log("content-scripts init");
-    
+
+    function extractHost(input) {
+        if (!input) return '';
+        let host = input.replace(/^https?:\/\//, '');
+        host = host.split('/')[0];
+        return host;
+    }
+
+    function isHostMatched(configHost) {
+        const expected = extractHost(configHost);
+        return expected && location.host === expected;
+    }
+
     function execApp(config) {
+        if (!isHostMatched(config.host)) {
+            console.log("Redmine Plus: 当前 host 不匹配，跳过执行");
+            return;
+        }
 
         // 添加项目快捷入口
         if (config.project_shortcuts.enabled) {
@@ -49,11 +65,14 @@
 
     chrome.storage.local.get("redminePlusConfig", function(result) {
         const config = result.redminePlusConfig || defaultConfig;
-        execApp(config);
+        if (isHostMatched(config.host)) {
+            execApp(config);
+        }
     });
 
     // 监听 #all_attributes 等区域的动态刷新，重新注入功能入口
     function observeDynamicAttributes(config) {
+        if (!isHostMatched(config.host)) return;
         const observer = new MutationObserver(function(mutations) {
             let shouldReinitImmersive = false;
             for (const mutation of mutations) {
