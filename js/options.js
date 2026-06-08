@@ -9,7 +9,19 @@ function loadConfig() {
 // 填充表单
 function populateForm(config) {
     // 基础设置
-    document.getElementById('host-input').value = config.host || '127.0.0.1:8080';
+    const hostItemsContainer = document.getElementById('host-items');
+    hostItemsContainer.innerHTML = '';
+    let hosts = [];
+    if (config.hosts && Array.isArray(config.hosts)) {
+        hosts = config.hosts;
+    } else if (config.host) {
+        hosts = [config.host];
+    }
+    if (hosts.length > 0) {
+        hosts.forEach(host => addHostItem(host));
+    } else {
+        addHostItem('127.0.0.1:8080');
+    }
 
     // 项目快捷入口
     document.getElementById('project-shortcuts-switch').checked = config.project_shortcuts.enabled;
@@ -92,6 +104,11 @@ function handleSwitchChange(card) {
 
 // 设置事件监听器
 function setupEventListeners() {
+    // 添加服务地址
+    document.getElementById('add-host-item').addEventListener('click', function() {
+        addHostItem();
+    });
+
     // 添加项目快捷入口
     document.getElementById('add-project-item').addEventListener('click', function() {
         addProjectShortcutItem();
@@ -143,6 +160,36 @@ function setupEventListeners() {
     document.getElementById('time-report-chart-switch').addEventListener('change', function() {
         handleSwitchChange('time-report-chart');
     });
+}
+
+// 添加服务地址项
+function addHostItem(value = '') {
+    const itemsContainer = document.getElementById('host-items');
+
+    const itemDiv = document.createElement('div');
+    itemDiv.className = 'project-item';
+    itemDiv.style.gridTemplateColumns = '1fr auto';
+
+    itemDiv.innerHTML = `
+        <input type="text" class="form-input" placeholder="例如：https://redm.example.com" value="${value}">
+        <button class="btn btn-danger" title="删除">🗑️</button>
+    `;
+
+    itemDiv.querySelector('.btn-danger').addEventListener('click', function() {
+        itemDiv.style.opacity = '0';
+        itemDiv.style.transform = 'translateX(-10px)';
+        setTimeout(() => itemDiv.remove(), 200);
+    });
+
+    itemsContainer.appendChild(itemDiv);
+
+    itemDiv.style.opacity = '0';
+    itemDiv.style.transform = 'translateY(-10px)';
+    setTimeout(() => {
+        itemDiv.style.transition = 'all 0.2s';
+        itemDiv.style.opacity = '1';
+        itemDiv.style.transform = 'translateY(0)';
+    }, 10);
 }
 
 // 添加项目快捷入口项
@@ -261,9 +308,19 @@ function saveConfig() {
         return;
     }
 
+    // 收集服务地址列表
+    const hostItems = document.querySelectorAll('#host-items .project-item');
+    const hosts = [];
+    hostItems.forEach(item => {
+        const val = item.querySelector('input').value.trim();
+        if (val) hosts.push(val);
+    });
+    const finalHosts = hosts.length > 0 ? hosts : ['127.0.0.1:8080'];
+
     // 构建配置对象
     const config = {
-        host: document.getElementById('host-input').value.trim() || '127.0.0.1:8080',
+        hosts: finalHosts,
+        host: finalHosts[0], // 保留 host 字段以兼容旧版
         project_shortcuts: {
             enabled: document.getElementById('project-shortcuts-switch').checked,
             default_query_id: document.getElementById('default-query-id').value,

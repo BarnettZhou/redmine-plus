@@ -9,13 +9,17 @@
         return host;
     }
 
-    function isHostMatched(configHost) {
-        const expected = extractHost(configHost);
-        return expected && location.host === expected;
+    function isHostMatched(configHosts) {
+        if (!configHosts) return false;
+        const hosts = Array.isArray(configHosts) ? configHosts : [configHosts];
+        return hosts.some(h => {
+            const expected = extractHost(h);
+            return expected && location.host === expected;
+        });
     }
 
     function execApp(config) {
-        if (!isHostMatched(config.host)) {
+        if (!isHostMatched(config.hosts || config.host)) {
             console.log("Redmine Plus: 当前 host 不匹配，跳过执行");
             return;
         }
@@ -65,14 +69,14 @@
 
     chrome.storage.local.get("redminePlusConfig", function(result) {
         const config = result.redminePlusConfig || defaultConfig;
-        if (isHostMatched(config.host)) {
+        if (isHostMatched(config.hosts || config.host)) {
             execApp(config);
         }
     });
 
     // 监听 #all_attributes 等区域的动态刷新，重新注入功能入口
     function observeDynamicAttributes(config) {
-        if (!isHostMatched(config.host)) return;
+        if (!isHostMatched(config.hosts || config.host)) return;
         const observer = new MutationObserver(function(mutations) {
             let shouldReinitImmersive = false;
             for (const mutation of mutations) {

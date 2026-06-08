@@ -1,6 +1,6 @@
 // 默认配置
 const defaultConfig = {
-    host: "127.0.0.1:8080",
+    hosts: ["127.0.0.1:8080"],
     project_shortcuts: {
         enabled: true,
         default_query_id: "",

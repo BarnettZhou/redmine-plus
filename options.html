@@ -45,7 +45,7 @@
     .header {
       background: linear-gradient(135deg, var(--primary-color) 0%, #7c3aed 100%);
       color: white;
-      padding: 2rem 0;
+      padding: 0.75rem 0;
       box-shadow: var(--shadow-md);
       position: sticky;
       top: 0;
@@ -58,32 +58,59 @@
       padding: 0 1.5rem;
       display: flex;
       align-items: center;
+      justify-content: space-between;
       gap: 1rem;
     }
 
+    .header-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
     .header-logo {
-      width: 40px;
-      height: 40px;
+      width: 32px;
+      height: 32px;
       background: rgba(255, 255, 255, 0.2);
       border-radius: var(--radius-md);
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: bold;
-      font-size: 20px;
+      font-size: 16px;
       backdrop-filter: blur(10px);
     }
 
     .header-title {
-      font-size: 1.5rem;
+      font-size: 1.125rem;
       font-weight: 700;
       letter-spacing: -0.5px;
     }
 
     .header-subtitle {
-      font-size: 0.875rem;
+      font-size: 0.75rem;
       opacity: 0.9;
-      margin-top: 0.25rem;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .header-actions .btn {
+      padding: 0.5rem 0.875rem;
+      font-size: 0.8125rem;
+    }
+
+    .header-actions .btn-secondary {
+      background: rgba(255, 255, 255, 0.15);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+    }
+
+    .header-actions .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.25);
+      border-color: rgba(255, 255, 255, 0.4);
     }
 
     /* Main Container */
@@ -341,16 +368,6 @@
       border-style: dashed;
     }
 
-    /* Footer Actions */
-    .footer-actions {
-      max-width: 800px;
-      margin: 2rem auto;
-      padding: 0 1.5rem 3rem;
-      display: flex;
-      gap: 1rem;
-      justify-content: flex-end;
-    }
-
     /* Message Toast */
     .message {
       position: fixed;
@@ -443,9 +460,7 @@
         grid-template-columns: 1fr;
       }
       
-      .footer-actions {
-        flex-direction: column;
-      }
+
     }
 
     /* Animations */
@@ -469,10 +484,20 @@
 <body>
   <header class="header">
     <div class="header-container">
-      <div class="header-logo">R+</div>
-      <div>
-        <div class="header-title">Redmine Plus</div>
-        <div class="header-subtitle">个性化设置与配置中心</div>
+      <div class="header-brand">
+        <div class="header-logo">R+</div>
+        <div>
+          <div class="header-title">Redmine Plus</div>
+          <div class="header-subtitle">个性化设置与配置中心</div>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-secondary" id="reset-option">
+          <span>↺</span> 重置
+        </button>
+        <button class="btn btn-primary" id="save-option">
+          <span>💾</span> 保存
+        </button>
       </div>
     </div>
   </header>
@@ -491,8 +516,13 @@
       <div class="card-body" id="host-options">
         <div class="sub-options">
           <div class="form-group">
-            <label class="form-label">Redmine 服务地址</label>
-            <input type="text" class="form-input" id="host-input" placeholder="例如：https://redm.example.com" value="127.0.0.1:8080">
+            <label class="form-label">Redmine 服务地址列表</label>
+            <div class="project-list" id="host-items">
+              <!-- 服务地址项将动态添加到这里 -->
+            </div>
+            <button class="btn btn-secondary btn-add" id="add-host-item">
+              <span>+</span> 添加地址
+            </button>
             <p style="color: var(--text-secondary); font-size: 0.75rem; margin-top: 0.5rem;">
               格式：https://example.com 或 example.com:8080，修改后需刷新 Redmine 页面生效
             </p>
@@ -710,15 +740,6 @@
     </article>
 
   </main>
-
-  <footer class="footer-actions">
-    <button class="btn btn-secondary" id="reset-option">
-      <span>↺</span> 重置为默认
-    </button>
-    <button class="btn btn-primary" id="save-option">
-      <span>💾</span> 保存设置
-    </button>
-  </footer>
 
   <div id="message" class="hide"></div>
 
