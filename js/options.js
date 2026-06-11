@@ -97,6 +97,30 @@ function populateForm(config) {
     const timeReportChartEnabled = config.time_report_chart ? config.time_report_chart.enabled : true;
     document.getElementById('time-report-chart-switch').checked = timeReportChartEnabled;
     handleSwitchChange('time-report-chart');
+
+    updateSideNavStatus();
+}
+
+// 更新侧边导航状态
+function updateSideNavStatus() {
+    const navItems = document.querySelectorAll('#side-nav .side-nav-item');
+    navItems.forEach(item => {
+        const statusEl = item.querySelector('.side-nav-status');
+        const switchId = item.dataset.switch;
+        if (!switchId) {
+            statusEl.textContent = '-';
+            statusEl.className = 'side-nav-status';
+            return;
+        }
+        const switchEl = document.getElementById(switchId);
+        if (switchEl && switchEl.checked) {
+            statusEl.textContent = 'on';
+            statusEl.className = 'side-nav-status on';
+        } else {
+            statusEl.textContent = 'off';
+            statusEl.className = 'side-nav-status off';
+        }
+    });
 }
 
 // 开关事件处理
@@ -126,6 +150,8 @@ function handleSwitchChange(card) {
         cardContent.querySelector('.disabled-message').style.display = 'block';
         cardContent.classList.add('disabled-overlay');
     }
+
+    updateSideNavStatus();
 }
 
 // 设置事件监听器
@@ -195,6 +221,17 @@ function setupEventListeners() {
     // 时间报表图表开关事件
     document.getElementById('time-report-chart-switch').addEventListener('change', function() {
         handleSwitchChange('time-report-chart');
+    });
+
+    // 侧边导航点击事件
+    document.querySelectorAll('#side-nav .side-nav-item').forEach(item => {
+        item.addEventListener('click', function() {
+            const targetId = this.dataset.target;
+            const targetEl = document.getElementById(targetId);
+            if (targetEl) {
+                targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
     });
 }
 

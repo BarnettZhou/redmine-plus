@@ -479,6 +479,80 @@
     .card:nth-child(4) { animation-delay: 0.2s; }
     .card:nth-child(5) { animation-delay: 0.25s; }
     .card:nth-child(6) { animation-delay: 0.3s; }
+
+    /* Side Navigation */
+    .side-nav {
+      position: fixed;
+      top: 104px;
+      left: calc(50% - 400px - 190px);
+      width: 190px;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+      padding: 0.5rem;
+      z-index: 90;
+      max-height: calc(100vh - 140px);
+      overflow-y: auto;
+      transition: var(--transition);
+    }
+
+    .side-nav-title {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0.5rem 0.625rem 0.25rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .side-nav-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5rem 0.625rem;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      font-size: 0.8125rem;
+      color: var(--text-primary);
+      transition: var(--transition);
+      gap: 0.5rem;
+    }
+
+    .side-nav-item:hover {
+      background: var(--primary-light);
+      color: var(--primary-color);
+    }
+
+    .side-nav-item.active {
+      background: var(--primary-light);
+      color: var(--primary-color);
+      font-weight: 500;
+    }
+
+    .side-nav-status {
+      font-size: 0.6875rem;
+      font-weight: 600;
+      padding: 0.125rem 0.375rem;
+      border-radius: 4px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .side-nav-status.on {
+      color: #065f46;
+      background: #d1fae5;
+    }
+
+    .side-nav-status.off {
+      color: #64748b;
+      background: #f1f5f9;
+    }
+
+    @media (max-width: 1100px) {
+      .side-nav { display: none; }
+    }
   </style>
 </head>
 <body>
@@ -502,9 +576,46 @@
     </div>
   </header>
 
+
+    <nav class="side-nav" id="side-nav">
+    <div class="side-nav-title">功能导航</div>
+    <div class="side-nav-item" data-target="card-base">
+      <span>基础设置</span>
+      <span class="side-nav-status">-</span>
+    </div>
+    <div class="side-nav-item" data-target="card-project-shortcuts" data-switch="project-shortcuts-switch">
+      <span>项目快捷入口</span>
+      <span class="side-nav-status">off</span>
+    </div>
+    <div class="side-nav-item" data-target="card-time-entry" data-switch="time-entry-assistant-switch">
+      <span>工时登记助手</span>
+      <span class="side-nav-status">off</span>
+    </div>
+    <div class="side-nav-item" data-target="card-issue-creation" data-switch="issue-creation-assistant-switch">
+      <span>新建助手</span>
+      <span class="side-nav-status">off</span>
+    </div>
+    <div class="side-nav-item" data-target="card-time-tracking" data-switch="time-tracking-shortcuts-switch">
+      <span>耗时跟踪快捷入口</span>
+      <span class="side-nav-status">off</span>
+    </div>
+    <div class="side-nav-item" data-target="card-immersive" data-switch="immersive-writing-switch">
+      <span>沉浸式书写</span>
+      <span class="side-nav-status">off</span>
+    </div>
+    <div class="side-nav-item" data-target="card-issue-details" data-switch="issue-details-switch">
+      <span>问题快捷查看</span>
+      <span class="side-nav-status">off</span>
+    </div>
+    <div class="side-nav-item" data-target="card-time-report-chart" data-switch="time-report-chart-switch">
+      <span>时间报表图表</span>
+      <span class="side-nav-status">off</span>
+    </div>
+  </nav>
+
   <main class="main-container">
     <!-- 基础设置 -->
-    <article class="card">
+    <article class="card" id="card-base">
       <header class="card-header">
         <div class="card-title-wrapper">
           <div class="card-icon">🌐</div>
@@ -535,7 +646,7 @@
     </article>
 
     <!-- 项目快捷入口 -->
-    <article class="card">
+    <article class="card" id="card-project-shortcuts">
       <header class="card-header">
         <div class="card-title-wrapper">
           <div class="card-icon">📁</div>
@@ -576,7 +687,7 @@
     </article>
 
     <!-- 工时登记助手 -->
-    <article class="card">
+    <article class="card" id="card-time-entry">
       <header class="card-header">
         <div class="card-title-wrapper">
           <div class="card-icon">📝</div>
@@ -592,6 +703,7 @@
       <div class="card-body" id="time-entry-assistant-options">
         <div class="sub-options">
           <div class="form-label" style="margin-bottom: 0.75rem;">项目映射列表</div>
+          <div class="form-label" style="margin-bottom: 0.75rem; font-size: 0.8125rem; color: var(--text-secondary);">项目 -> 事业部</div>
           <div class="project-list" id="time-entry-assistant-items">
             <!-- 映射项将动态添加到这里 -->
           </div>
@@ -607,12 +719,12 @@
         </div>
       </div>
       <footer class="card-footer">
-        根据当前项目自动选择工时登记页面的自定义字段值
+        根据当前项目自动选择工时登记页面的事业部
       </footer>
     </article>
 
     <!-- 新建助手 -->
-    <article class="card">
+    <article class="card" id="card-issue-creation">
       <header class="card-header">
         <div class="card-title-wrapper">
           <div class="card-icon">🆕</div>
@@ -675,7 +787,7 @@
     </article>
 
     <!-- 耗时跟踪快捷入口 -->
-    <article class="card">
+    <article class="card" id="card-time-tracking">
       <header class="card-header">
         <div class="card-title-wrapper">
           <div class="card-icon">⏱️</div>
@@ -707,7 +819,7 @@
     </article>
 
     <!-- 沉浸式书写 -->
-    <article class="card">
+    <article class="card" id="card-immersive">
       <header class="card-header">
         <div class="card-title-wrapper">
           <div class="card-icon">✍️</div>
@@ -739,7 +851,7 @@
     </article>
 
     <!-- 问题快捷查看 -->
-    <article class="card">
+    <article class="card" id="card-issue-details">
       <header class="card-header">
         <div class="card-title-wrapper">
           <div class="card-icon">👁️</div>
@@ -771,7 +883,7 @@
     </article>
 
     <!-- 时间报表图表 -->
-    <article class="card">
+    <article class="card" id="card-time-report-chart">
       <header class="card-header">
         <div class="card-title-wrapper">
           <div class="card-icon">📊</div>
