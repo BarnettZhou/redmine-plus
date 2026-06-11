@@ -611,6 +611,69 @@
       </footer>
     </article>
 
+    <!-- 新建助手 -->
+    <article class="card">
+      <header class="card-header">
+        <div class="card-title-wrapper">
+          <div class="card-icon">🆕</div>
+          <div>
+            <div class="card-title">新建助手</div>
+            <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.25rem;">💡 点击Redmine右上角用户名可在地址栏看到自己的用户ID</div>
+          </div>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="issue-creation-assistant-switch" checked>
+          <span class="slider"></span>
+        </label>
+      </header>
+      <div class="card-body" id="issue-creation-assistant-options">
+        <div class="sub-options">
+          <div class="form-label" style="margin-bottom: 0.75rem; font-weight: 600;">通用字段</div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">产品经理</label>
+              <input type="text" class="form-input" id="issue-creation-product-manager" placeholder="输入用户 ID">
+            </div>
+            <div class="form-group">
+              <label class="form-label">责任人</label>
+              <input type="text" class="form-input" id="issue-creation-responsible-person" placeholder="输入用户 ID">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">指派给</label>
+              <input type="text" class="form-input" id="issue-creation-assigned-to" placeholder="输入用户 ID">
+            </div>
+            <div class="form-group">
+              <label class="form-label">项目文档留痕</label>
+              <select class="form-input" id="issue-creation-document-trace" style="appearance: auto;">
+                <option value="0" selected>否</option>
+                <option value="1">是</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-label" style="margin-top: 1rem; margin-bottom: 0.75rem; font-weight: 600;">项目字段</div>
+          <div class="form-label" style="margin-bottom: 0.75rem; font-size: 0.8125rem; color: var(--text-secondary);">项目 -> 事业部</div>
+          <div class="project-list" id="issue-creation-assistant-items">
+            <!-- 映射项将动态添加到这里 -->
+          </div>
+
+          <button class="btn btn-secondary btn-add" id="add-issue-creation-assistant-item">
+            <span>+</span> 添加映射
+          </button>
+        </div>
+        <div class="disabled-message hide" style="display: none;">
+          <div class="disabled-badge">
+            <span>⚠️</span> 功能当前已禁用
+          </div>
+        </div>
+      </div>
+      <footer class="card-footer">
+        新建问题时自动填充通用字段和根据项目映射事业部
+      </footer>
+    </article>
+
     <!-- 耗时跟踪快捷入口 -->
     <article class="card">
       <header class="card-header">

@@ -55,6 +55,32 @@ function populateForm(config) {
         });
     }
 
+    // 新建助手
+    const issueCreationEnabled = config.issue_creation_assistant ? config.issue_creation_assistant.enabled : true;
+    document.getElementById('issue-creation-assistant-switch').checked = issueCreationEnabled;
+    handleSwitchChange('issue-creation-assistant');
+
+    if (config.issue_creation_assistant && config.issue_creation_assistant.common_fields) {
+        const cf = config.issue_creation_assistant.common_fields;
+        document.getElementById('issue-creation-product-manager').value = cf.product_manager || '';
+        document.getElementById('issue-creation-responsible-person').value = cf.responsible_person || '';
+        document.getElementById('issue-creation-assigned-to').value = cf.assigned_to || '';
+        document.getElementById('issue-creation-document-trace').value = cf.document_trace || '0';
+    } else {
+        document.getElementById('issue-creation-product-manager').value = '';
+        document.getElementById('issue-creation-responsible-person').value = '';
+        document.getElementById('issue-creation-assigned-to').value = '';
+        document.getElementById('issue-creation-document-trace').value = '0';
+    }
+
+    const issueCreationItemsContainer = document.getElementById('issue-creation-assistant-items');
+    issueCreationItemsContainer.innerHTML = '';
+    if (config.issue_creation_assistant && config.issue_creation_assistant.project_mappings && config.issue_creation_assistant.project_mappings.length > 0) {
+        config.issue_creation_assistant.project_mappings.forEach(item => {
+            addIssueCreationAssistantItem(item.project_name, item.division);
+        });
+    }
+
     // 耗时快捷查询
     document.getElementById('time-tracking-shortcuts-switch').checked = config.time_tracking_shortcuts.enabled;
     handleSwitchChange('time-tracking-shortcuts');
@@ -139,6 +165,16 @@ function setupEventListeners() {
     // 添加工时登记助手映射项
     document.getElementById('add-time-entry-assistant-item').addEventListener('click', function() {
         addTimeEntryAssistantItem();
+    });
+
+    // 新建助手开关事件
+    document.getElementById('issue-creation-assistant-switch').addEventListener('change', function() {
+        handleSwitchChange('issue-creation-assistant');
+    });
+
+    // 添加新建助手映射项
+    document.getElementById('add-issue-creation-assistant-item').addEventListener('click', function() {
+        addIssueCreationAssistantItem();
     });
 
     // 耗时快捷查询开关事件
@@ -257,6 +293,38 @@ function addTimeEntryAssistantItem(projectName = '', fieldValue = '') {
     }, 10);
 }
 
+// 添加新建助手映射项
+function addIssueCreationAssistantItem(projectName = '', division = '') {
+    const itemsContainer = document.getElementById('issue-creation-assistant-items');
+
+    const itemDiv = document.createElement('div');
+    itemDiv.className = 'project-item';
+
+    itemDiv.innerHTML = `
+        <input type="text" class="form-input" placeholder="项目名称" value="${projectName}">
+        <input type="text" class="form-input" placeholder="事业部" value="${division}">
+        <button class="btn btn-danger" title="删除">🗑️</button>
+    `;
+
+    // 添加删除按钮事件
+    itemDiv.querySelector('.btn-danger').addEventListener('click', function() {
+        itemDiv.style.opacity = '0';
+        itemDiv.style.transform = 'translateX(-10px)';
+        setTimeout(() => itemDiv.remove(), 200);
+    });
+    
+    itemsContainer.appendChild(itemDiv);
+    
+    // 入场动画
+    itemDiv.style.opacity = '0';
+    itemDiv.style.transform = 'translateY(-10px)';
+    setTimeout(() => {
+        itemDiv.style.transition = 'all 0.2s';
+        itemDiv.style.opacity = '1';
+        itemDiv.style.transform = 'translateY(0)';
+    }, 10);
+}
+
 // 页面加载完成后初始化
 document.addEventListener('DOMContentLoaded', function() {
     loadConfig();
@@ -288,13 +356,26 @@ function validateForm() {
         const fieldValue = item.querySelector('input[placeholder="字段值"]').value.trim();
 
         if (projectName && !fieldValue) {
-            errors.push(`第${index + 1}个映射缺少字段值`);
+            errors.push(`工时登记：第${index + 1}个映射缺少字段值`);
         }
         if (fieldValue && !projectName) {
-            errors.push(`第${index + 1}个映射缺少项目名称`);
+            errors.push(`工时登记：第${index + 1}个映射缺少项目名称`);
         }
     });
-    
+
+    // 验证新建助手项目映射
+    const issueCreationItems = document.querySelectorAll('#issue-creation-assistant-items .project-item');
+    issueCreationItems.forEach((item, index) => {
+        const projectName = item.querySelector('input[placeholder="项目名称"]').value.trim();
+        const division = item.querySelector('input[placeholder="事业部"]').value.trim();
+
+        if (projectName && !division) {
+            errors.push(`新建助手：第${index + 1}个映射缺少事业部`);
+        }
+        if (division && !projectName) {
+            errors.push(`新建助手：第${index + 1}个映射缺少项目名称`);
+        }
+    });
     
     return errors;
 }
@@ -342,6 +423,16 @@ function saveConfig() {
         time_entry_assistant: {
             enabled: document.getElementById('time-entry-assistant-switch').checked,
             items: []
+        },
+        issue_creation_assistant: {
+            enabled: document.getElementById('issue-creation-assistant-switch').checked,
+            common_fields: {
+                product_manager: document.getElementById('issue-creation-product-manager').value.trim(),
+                responsible_person: document.getElementById('issue-creation-responsible-person').value.trim(),
+                assigned_to: document.getElementById('issue-creation-assigned-to').value.trim(),
+                document_trace: document.getElementById('issue-creation-document-trace').value
+            },
+            project_mappings: []
         }
     };
 
@@ -372,6 +463,20 @@ function saveConfig() {
             config.time_entry_assistant.items.push({
                 project_name: projectName,
                 custom_field_value: fieldValue
+            });
+        }
+    });
+
+    // 添加新建助手映射项
+    const issueCreationItems = document.querySelectorAll('#issue-creation-assistant-items .project-item');
+    issueCreationItems.forEach(item => {
+        const projectName = item.querySelector('input[placeholder="项目名称"]').value.trim();
+        const division = item.querySelector('input[placeholder="事业部"]').value.trim();
+        
+        if (projectName && division) {
+            config.issue_creation_assistant.project_mappings.push({
+                project_name: projectName,
+                division: division
             });
         }
     });

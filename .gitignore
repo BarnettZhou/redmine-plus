@@ -1,3 +1,25 @@
-RedmineCopilot.code-workspace
-/resources/
-/archive/
+# IDE / Editor
+.vscode/
+.idea/
+*.code-workspace
+
+# macOS
+.DS_Store
+
+# Temporary / Log files
+*.log
+lportal_*.txt
+
+# Build / Package
+*.zip
+*.crx
+*.pem
+dist/
+build/
+
+# Dependencies
+node_modules/
+
+# Project-specific
+resources/
+archive/

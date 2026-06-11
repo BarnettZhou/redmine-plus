@@ -35,5 +35,19 @@ const defaultConfig = {
                 "custom_field_value": "1"
             }
         ]
+    },
+    issue_creation_assistant: {
+        enabled: true,
+        common_fields: {
+            product_manager: "",
+            responsible_person: "",
+            assigned_to: "",
+            document_trace: "0"
+        },
+        project_mappings: [
+            { project_name: "小草", division: "坤玑" },
+            { project_name: "财道", division: "瑞麟" },
+            { project_name: "常春藤", division: "坤玑" }
+        ]
     }
 };

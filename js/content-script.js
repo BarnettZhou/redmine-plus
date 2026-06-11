@@ -65,6 +65,11 @@
         if (config.time_entry_assistant && config.time_entry_assistant.enabled) {
             timeEntryAssistantInit(config.time_entry_assistant);
         }
+
+        // 添加新建助手
+        if (config.issue_creation_assistant && config.issue_creation_assistant.enabled) {
+            issueCreationAssistantInit(config.issue_creation_assistant);
+        }
     }
 
     chrome.storage.local.get("redminePlusConfig", function(result) {
